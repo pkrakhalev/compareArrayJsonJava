@@ -1,7 +1,9 @@
 package test.com.epam.pkrakhale;
 
+import com.google.common.collect.Sets;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -10,8 +12,11 @@ import java.util.Set;
 
 public class JsonArrayCompareTest {
 
-    @Test
-    public void testArray() {
+    private final JSONArray arr1 = new JSONArray();
+    private final JSONArray arr2 = new JSONArray();
+
+    @Before
+    public void beforeEachTestMethod() {
         JSONObject jo1 = new JSONObject();
         jo1.put("id", 1);
         jo1.put("name", "Doe");
@@ -27,22 +32,24 @@ public class JsonArrayCompareTest {
         jo3.put("name", "Doe3");
         jo3.put("type", "PC3");
 
-        JSONArray arr1 = new JSONArray();
         arr1.put(jo1);
         arr1.put(jo3);
 
-        JSONArray arr2 = new JSONArray();
         arr2.put(jo1);
         arr2.put(jo2);
+    }
 
-        compare(arr1, arr2);
+    @Test
+    public void compareArraysTest() {
+        Set<Object> difference = compare(arr1, arr2);
+        System.out.println("Difference: " + Arrays.toString(difference.toArray()));
     }
 
     //I want to compare these 2 jsonArray, if these 2 jsonArray are different, Print the reason:
     //which json object is missing in actual jsonarray
     //which json object appeared in actual jsonarray but it should not appear
     //We expect a common function to accept the 2 jsonArray and return the difference
-    private Set<Object> compare(JSONArray actualArray, JSONArray expectedArray) {
+    private Set<Object> compare(final JSONArray actualArray, final JSONArray expectedArray) {
         Set<Object> actualSet = arrayToSet(actualArray);
         Set<Object> expectedSet = arrayToSet(expectedArray);
         Set<Object> copyActualSet = new HashSet<>(actualSet);
@@ -55,9 +62,15 @@ public class JsonArrayCompareTest {
         expectedSet.removeAll(copyActualSet);
         difference.addAll(expectedSet);
         System.out.println("Missed in actual array: " + Arrays.toString(expectedSet.toArray()));
-
-        System.out.println("Difference: " + Arrays.toString(difference.toArray()));
         return difference;
+    }
+
+    @Test
+    public void compareArraysUsingGoogleTest() {
+        Set<Object> actualSet = arrayToSet(arr1);
+        Set<Object> expectedSet = arrayToSet(arr2);
+        Set<Object> differenceGoogle = Sets.symmetricDifference(actualSet, expectedSet);
+        System.out.println("Difference: " + Arrays.toString(differenceGoogle.toArray()));
     }
 
     private Set<Object> arrayToSet(JSONArray array) {
