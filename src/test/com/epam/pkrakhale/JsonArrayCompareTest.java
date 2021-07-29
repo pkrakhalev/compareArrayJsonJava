@@ -3,7 +3,7 @@ package test.com.epam.pkrakhale;
 import com.google.common.collect.Sets;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -12,11 +12,11 @@ import java.util.Set;
 
 public class JsonArrayCompareTest {
 
-    private final JSONArray arr1 = new JSONArray();
-    private final JSONArray arr2 = new JSONArray();
+    private static final JSONArray arr1 = new JSONArray();
+    private static final JSONArray arr2 = new JSONArray();
 
-    @Before
-    public void beforeEachTestMethod() {
+    @BeforeClass
+    public static void beforeEachTestMethod() {
         JSONObject jo1 = new JSONObject();
         jo1.put("id", 1);
         jo1.put("name", "Doe");
